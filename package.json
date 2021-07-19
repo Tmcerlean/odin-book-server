@@ -1,0 +1,31 @@
+{
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.13",
+    "@types/node": "^16.3.3",
+    "nodemon": "^2.0.12",
+    "typescipt": "^1.0.0"
+  },
+  "name": "odin-book-server",
+  "description": "",
+  "version": "1.0.0",
+  "main": "dist/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "start": "tsc & node .",
+    "dev": "tsc -w & nodemon ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tmcerlean/odin-book-server.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Tmcerlean/odin-book-server/issues"
+  },
+  "homepage": "https://github.com/Tmcerlean/odin-book-server#readme"
+}
