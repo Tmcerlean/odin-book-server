@@ -56,6 +56,15 @@ router.delete('/posts/:id', [
 
 // USER ROUTES
 
+// GET user profile - /api/:userId
+router.get('/:userId', userController.user_get);
+
+// PUT edit user profile - /api/:userId
+router.put('/:userId', userController.user_edit_profile);
+
+// PUT edit user profile image - /api/:userId/profileimage
+router.put('/:userId/profileimage', userController.user_edit_profile_image)
+
 // POST request for user log in - /api/login
 router.post('/login', userController.login_post);
 
