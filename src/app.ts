@@ -1,4 +1,15 @@
-import express, { Errback } from 'express';
+// Imports
+import express, { Errback, NextFunction, Request, Response } from 'express';
+const createError = require('http-errors');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+
+// Type information
+interface ErrorInfo extends Error {
+  status: number
+}
+
 
 // Initialise dotenv
 require('dotenv').config()
@@ -73,3 +84,34 @@ var http = require('http');
    debug('Listening on ' + bind);
  }
  
+
+// Routes
+const apiRouter = require('./routes/api');
+
+// Add middleware libraries
+app.use(logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Add router to request handling chain
+app.use('/api', apiRouter);
+
+// Catch 404 and forward to error handler
+app.use(function(req, res, next) {
+  next(createError(404));
+});
+
+// Error handler
+app.use(function(err: ErrorInfo, req: Request, res: Response, next: NextFunction) {
+  // set locals, only providing error in development
+  res.locals.message = err.message;
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
+
+  // render the error page
+  res.status(err.status || 500);
+  res.render('error');
+});
+
+ module.exports = app;
