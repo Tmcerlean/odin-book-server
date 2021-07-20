@@ -4,10 +4,10 @@ var Schema = mongoose.Schema;
 
 var PostSchema = new Schema(
   {
-    author: {type: Schema.Types.ObjectId, ref: "User"},
-    content: {type: String, required: true, minLength: 1},
-    timestamp: {type: Date, default: Date.now, required: true},
-    imageUrl: {type: String, required: false},
+    author: { type: Schema.Types.ObjectId, ref: "User" },
+    content: { type: String, required: true, minLength: 1 },
+    timestamp: { type: Date, default: Date.now, required: true },
+    imageUrl: { type: String, required: false },
     comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
     likes: [{ type: Schema.Types.ObjectId, ref: "User" }],
   }
