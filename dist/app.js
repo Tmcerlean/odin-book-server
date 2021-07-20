@@ -77,6 +77,12 @@ app.use(cookieParser());
 app.use(express_1.default.static(path.join(__dirname, 'public')));
 // Add router to request handling chain
 app.use('/api', apiRouter);
+//Set up mongoose connection
+var mongoose = require('mongoose');
+var mongoDB = process.env.DB_URL;
+mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 // Catch 404 and forward to error handler
 app.use(function (req, res, next) {
     next(createError(404));
