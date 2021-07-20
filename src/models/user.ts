@@ -4,8 +4,8 @@ var Schema = mongoose.Schema;
 
 var UserSchema = new Schema(
   {
-    first_name: {type: String, required: true, minLength: 1, maxLength: 100},
-    last_name: {type: String, required: true, minLength: 1, maxLength: 100},
+    firstName: {type: String, required: true, minLength: 1, maxLength: 100},
+    lastName: {type: String, required: true, minLength: 1, maxLength: 100},
     email: { type: String, required: true, minLength: 1, maxLength: 300},
     hashedPassword: {type: String, required: true, minLength: 1},
     posts: [{ type: Schema.Types.ObjectId, ref: "Post" }],
