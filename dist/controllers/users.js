@@ -33,52 +33,50 @@ exports.signup_post = [
         }
         else {
             // Data from form is valid.
-            // Check if username already exists.
-            yield User.findOne({ 'email': req.body.email })
-                .exec(function (err, found_email) {
-                // TEST CODE - REMOVE
-                res.status(200).json({
-                    message: "Sign up failed",
-                    test: found_email
-                });
-                if (found_email) {
+            // // Check if username already exists.
+            // await User.findOne({ 'email': req.body.email })
+            //     .exec(function(err: Error, found_email: FoundEmail) {
+            //         // TEST CODE - REMOVE
+            //         res.status(200).json({
+            //             message: "Sign up failed",
+            //             test: found_email
+            //         });
+            //         if (found_email) {
+            //             return next(err);
+            //         }
+            //         else if (err) { return next(err); }
+            //         else {
+            //Create a user object with escaped and trimmed data
+            bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
+                // If err, do something
+                if (err) {
                     return next(err);
                 }
-                else if (err) {
-                    return next(err);
-                }
-                else {
-                    //Create a user object with escaped and trimmed data
-                    bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
-                        // If err, do something
-                        if (err) {
-                            return next(err);
-                        }
-                        ;
-                        // Otherwise, store hashedPassword in DB
-                        const user = new User({
-                            firstName: req.body.first_name,
-                            lastName: req.body.last_name,
-                            email: req.body.email,
-                            hashedPassword: hashedPassword
-                        }).save((err) => {
-                            if (err) {
-                                // TEST CODE - REMOVE
-                                res.status(200).json({
-                                    message: "Sign up faileds",
-                                    test: err
-                                });
-                                return next(err);
-                            }
-                            ;
-                            res.status(200).json({
-                                message: "Signed up successfully",
-                                // user: req.user,
-                            });
+                ;
+                // Otherwise, store hashedPassword in DB
+                const user = new User({
+                    firstName: req.body.first_name,
+                    lastName: req.body.last_name,
+                    email: req.body.email,
+                    hashedPassword: hashedPassword
+                }).save((err) => {
+                    if (err) {
+                        // TEST CODE - REMOVE
+                        res.status(200).json({
+                            message: "Sign up faileds",
+                            test: err
                         });
+                        return next(err);
+                    }
+                    ;
+                    res.status(200).json({
+                        message: "Signed up successfully",
+                        // user: req.user,
                     });
-                }
+                });
             });
+            //     }
+            // })
         }
     })
 ];

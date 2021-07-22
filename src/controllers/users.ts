@@ -42,23 +42,23 @@ exports.signup_post = [
         else {
             // Data from form is valid.
 
-            // Check if username already exists.
-            await User.findOne({ 'email': req.body.email })
-                .exec(function(err: Error, found_email: FoundEmail) {
+            // // Check if username already exists.
+            // await User.findOne({ 'email': req.body.email })
+            //     .exec(function(err: Error, found_email: FoundEmail) {
 
-                    // TEST CODE - REMOVE
-                    res.status(200).json({
-                        message: "Sign up failed",
-                        test: found_email
-                    });
+            //         // TEST CODE - REMOVE
+            //         res.status(200).json({
+            //             message: "Sign up failed",
+            //             test: found_email
+            //         });
 
-                    if (found_email) {
-                        return next(err);
-                    }
+            //         if (found_email) {
+            //             return next(err);
+            //         }
 
-                    else if (err) { return next(err); }
+            //         else if (err) { return next(err); }
                     
-                    else {
+            //         else {
                         //Create a user object with escaped and trimmed data
                         bcrypt.hash(req.body.password, 10, (err: Error, hashedPassword: String) => {
                           
@@ -87,8 +87,8 @@ exports.signup_post = [
                                 });
                             });
                         });
-                    }
-                })
+                //     }
+                // })
         }
     }
 ];
