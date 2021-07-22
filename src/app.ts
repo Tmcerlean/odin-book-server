@@ -118,7 +118,7 @@ app.use(function(err: ErrorInfo, req: Request, res: Response, next: NextFunction
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.json(`${err.status} error`);
 });
 
  module.exports = app;
