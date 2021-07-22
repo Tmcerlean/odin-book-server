@@ -4,6 +4,7 @@ const createError = require('http-errors');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const cors = require('cors');
 
 // Type information
 interface ErrorInfo extends Error {
@@ -15,6 +16,9 @@ interface ErrorInfo extends Error {
 require('dotenv').config()
 
 const app = express();
+
+// CORS setup
+app.use(cors())
 
 // Module dependencies
 var debug = require('debug')('blog:server');
