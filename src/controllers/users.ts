@@ -1,7 +1,11 @@
 import { NextFunction, Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
 const User = require("../models/user");
-const bcrypt = require("bcryptjs");
+const {
+    issueJWT,
+    generatePassword,
+    validatePassword,
+} = require("../utils/auth-utils");
 
 interface FoundEmail {
     posts: String[],
@@ -37,42 +41,29 @@ exports.signup_post = [
                 errors: errors.array()
             });
         }
-        else {
-            // Data from form is valid.
 
-            bcrypt.hash(req.body.password, 10, (err: Error, hashedPassword: String) => {
-                
-                // If err, do something
-                if (err) { 
-                    return next(err);
-                };
-                // Otherwise, store hashedPassword in DB
-                const user = new User({
-                    firstName: req.body.first_name,
-                    lastName: req.body.last_name,
-                    email: req.body.email,
-                    hashedPassword: hashedPassword
-                });
-                
-                try {
-                    user.save();
-                    const tokenObject = issueJWT(user);
+        // Data from form is valid.
+        const hashedPassword = generatePassword(req.body.password);
+        
+        // Otherwise, store hashedPassword in DB
+        const user = new User({
+            firstName: req.body.first_name,
+            lastName: req.body.last_name,
+            email: req.body.email,
+            hashedPassword: hashedPassword
+        });
+        
+        try {
+            await user.save();
+            const tokenObject = issueJWT(user);
 
-                    return res.status(200).json({
-                        message: "Signed up successfully",
-                        token: tokenObject,
-                        user: {
-                          first_name: user.first_name,
-                          last_name: user.last_name,
-                          email: user.email,
-                          id: user._id,
-                          profilePicUrl: user.profilePicUrl ? user.profilePicUrl : "",
-                        },
-                    })
-                } catch (err) {
-                    return res.status(500).json({ error: err.message });
-                }
+            return res.status(200).json({
+                message: "Signed up successfully",
+                token: tokenObject,
+                user: user
             });
+        } catch (err) {
+            return res.status(500).json({ error: err.message });
         }
     }
 ];

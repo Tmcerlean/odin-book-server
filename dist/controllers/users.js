@@ -11,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_validator_1 = require("express-validator");
 const User = require("../models/user");
-const bcrypt = require("bcryptjs");
+const { issueJWT, generatePassword, validatePassword, } = require("../utils/auth-utils");
 exports.signup_post = [
     // Validate and sanitize fields
     express_validator_1.body('first_name').trim().isLength({ min: 1 }).escape().withMessage('First name must be specified')
@@ -26,35 +26,30 @@ exports.signup_post = [
         const errors = express_validator_1.validationResult(req);
         if (!errors.isEmpty()) {
             // There are errors in the form data.
-            return res.json({
-                email: req.body.email,
-                errors: errors.array(),
+            return res.status(400).json({
+                errors: errors.array()
             });
         }
-        else {
-            // Data from form is valid.
-            bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
-                // If err, do something
-                if (err) {
-                    return next(err);
-                }
-                ;
-                // Otherwise, store hashedPassword in DB
-                const user = new User({
-                    firstName: req.body.first_name,
-                    lastName: req.body.last_name,
-                    email: req.body.email,
-                    hashedPassword: hashedPassword
-                }).save((err) => {
-                    if (err) {
-                        return next(err);
-                    }
-                    ;
-                    res.status(200).json({
-                        message: "Signed up successfully",
-                    });
-                });
+        // Data from form is valid.
+        const hashedPassword = generatePassword(req.body.password);
+        // Otherwise, store hashedPassword in DB
+        const user = new User({
+            firstName: req.body.first_name,
+            lastName: req.body.last_name,
+            email: req.body.email,
+            hashedPassword: hashedPassword
+        });
+        try {
+            yield user.save();
+            const tokenObject = issueJWT(user);
+            return res.status(200).json({
+                message: "Signed up successfully",
+                token: tokenObject,
+                user: user
             });
+        }
+        catch (err) {
+            return res.status(500).json({ error: err.message });
         }
     })
 ];
