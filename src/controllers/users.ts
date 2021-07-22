@@ -33,9 +33,8 @@ exports.signup_post = [
 
         if (!errors.isEmpty()) {
             // There are errors in the form data.
-            return res.json({
-                email: req.body.email,
-                errors: errors.array(),
+            return res.status(400).json({
+                errors: errors.array()
             });
         }
         else {
@@ -53,14 +52,26 @@ exports.signup_post = [
                     lastName: req.body.last_name,
                     email: req.body.email,
                     hashedPassword: hashedPassword
-                }).save((err: Error) => {
-                    if (err) { 
-                        return next(err);
-                    };
-                    res.status(200).json({
-                        message: "Signed up successfully",
-                    });
                 });
+                
+                try {
+                    user.save();
+                    const tokenObject = issueJWT(user);
+
+                    return res.status(200).json({
+                        message: "Signed up successfully",
+                        token: tokenObject,
+                        user: {
+                          first_name: user.first_name,
+                          last_name: user.last_name,
+                          email: user.email,
+                          id: user._id,
+                          profilePicUrl: user.profilePicUrl ? user.profilePicUrl : "",
+                        },
+                    })
+                } catch (err) {
+                    return res.status(500).json({ error: err.message });
+                }
             });
         }
     }

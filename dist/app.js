@@ -9,9 +9,12 @@ const createError = require('http-errors');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const cors = require('cors');
 // Initialise dotenv
 require('dotenv').config();
 const app = express_1.default();
+// CORS setup
+app.use(cors());
 // Module dependencies
 var debug = require('debug')('blog:server');
 var http = require('http');

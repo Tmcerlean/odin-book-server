@@ -11,7 +11,6 @@ interface ErrorInfo extends Error {
   status: number
 }
 
-
 // Initialise dotenv
 require('dotenv').config()
 
