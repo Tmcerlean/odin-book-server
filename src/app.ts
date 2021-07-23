@@ -1,10 +1,13 @@
 // Imports
-import express, { Errback, NextFunction, Request, Response } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 const createError = require('http-errors');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
+const session = require('express-session')
+const passport = require("passport");
+
 
 // Type information
 interface ErrorInfo extends Error {
@@ -97,6 +100,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Add router to request handling chain
 app.use('/api', apiRouter);

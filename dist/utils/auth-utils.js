@@ -18,7 +18,7 @@ const issueJWT = (user) => {
         expires: expiresIn,
     };
 };
-// Password Generation
+// Password Hash Generation
 const generatePassword = (password) => {
     return bcrypt.hashSync(password, 10);
 };

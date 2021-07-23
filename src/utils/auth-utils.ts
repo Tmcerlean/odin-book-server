@@ -1,7 +1,7 @@
 import Mongoose from 'mongoose';
 
-const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 interface User {
     _id: Mongoose.Types._ObjectId
@@ -36,7 +36,7 @@ const issueJWT = (user: User) => {
   };
 };
 
-// Password Generation
+// Password Hash Generation
 
 const generatePassword = (password: String) => {
   return bcrypt.hashSync(password, 10);
