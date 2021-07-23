@@ -10,6 +10,8 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
+const session = require('express-session');
+const passport = require("passport");
 // Initialise dotenv
 require('dotenv').config();
 const app = express_1.default();
@@ -78,6 +80,8 @@ app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express_1.default.static(path.join(__dirname, 'public')));
+app.use(passport.initialize());
+app.use(passport.session());
 // Add router to request handling chain
 app.use('/api', apiRouter);
 //Set up mongoose connection
