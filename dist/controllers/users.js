@@ -12,6 +12,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_validator_1 = require("express-validator");
 const User = require("../models/user");
 const { issueJWT, generatePassword, validatePassword, } = require("../utils/auth-utils");
+// interface FoundEmail {
+//     posts: String[],
+//     friends: String[],
+//     friendRequests: String[],
+//     _id: String,
+//     firstName: String,
+//     lastName: String,
+//     email: String,
+//     hashedPassword: String,
+//     __v: Number
+// }
 exports.signup_post = [
     // Validate and sanitize fields
     express_validator_1.body('first_name').trim().isLength({ min: 1 }).escape().withMessage('First name must be specified')

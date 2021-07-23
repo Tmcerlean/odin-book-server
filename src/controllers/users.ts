@@ -7,17 +7,17 @@ const {
     validatePassword,
 } = require("../utils/auth-utils");
 
-interface FoundEmail {
-    posts: String[],
-    friends: String[],
-    friendRequests: String[],
-    _id: String,
-    firstName: String,
-    lastName: String,
-    email: String,
-    hashedPassword: String,
-    __v: Number
-}
+// interface FoundEmail {
+//     posts: String[],
+//     friends: String[],
+//     friendRequests: String[],
+//     _id: String,
+//     firstName: String,
+//     lastName: String,
+//     email: String,
+//     hashedPassword: String,
+//     __v: Number
+// }
 
 exports.signup_post = [
 
