@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const JwtStrategy = require("passport-jwt").Strategy;
 const ExtractJwtToken = require("passport-jwt").ExtractJwt;
 const User = require("../models/user");
@@ -17,7 +18,7 @@ module.exports = new JwtStrategy(opts, function (jwt_payload, done) {
         }
         else {
             return done(null, false);
-            // or you could create a new account
+            // Or you could create a new account
         }
     });
 });

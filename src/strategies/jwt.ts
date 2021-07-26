@@ -24,7 +24,7 @@ module.exports = new JwtStrategy(opts, function (jwt_payload: any, done: Functio
             return done(null, user);
         } else {
             return done(null, false);
-            // or you could create a new account
+            // Or you could create a new account
         }
     });
 });
