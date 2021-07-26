@@ -71,8 +71,8 @@ const userController = require('../controllers/users');
 // // POST add user profile image - /api/:userId/profileimage
 // router.post('/:userId/profileimage', userController.user_add_profile_image);
 
-// // POST request for user log in - /api/login
-// router.post('/login', userController.login_post);
+// POST request for user log in - /api/login
+router.post('/login', userController.login_post);
 
 // // POST request for log out - /api/logout
 // router.post('/logout', userController.logout_post);

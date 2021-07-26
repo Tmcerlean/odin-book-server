@@ -15,6 +15,8 @@ const passport = require("passport");
 // Initialise dotenv
 require('dotenv').config();
 const app = express_1.default();
+const jwtStrategy = require("./strategies/jwt");
+const facebookTokenStrategy = require("./strategies/facebook");
 // CORS setup
 app.use(cors());
 // Module dependencies
@@ -82,6 +84,9 @@ app.use(cookieParser());
 app.use(express_1.default.static(path.join(__dirname, 'public')));
 app.use(passport.initialize());
 app.use(passport.session());
+// Add Passport strategy middleware
+passport.use(jwtStrategy);
+passport.use(facebookTokenStrategy);
 // Add router to request handling chain
 app.use('/api', apiRouter);
 //Set up mongoose connection

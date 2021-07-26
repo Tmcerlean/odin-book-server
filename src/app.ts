@@ -8,7 +8,6 @@ const cors = require('cors');
 const session = require('express-session')
 const passport = require("passport");
 
-
 // Type information
 interface ErrorInfo extends Error {
   status: number
@@ -18,6 +17,9 @@ interface ErrorInfo extends Error {
 require('dotenv').config()
 
 const app = express();
+
+const jwtStrategy = require("./strategies/jwt");
+const facebookTokenStrategy = require("./strategies/facebook");
 
 // CORS setup
 app.use(cors())
@@ -101,6 +103,10 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(passport.initialize());
 app.use(passport.session());
+
+// Add Passport strategy middleware
+passport.use(jwtStrategy);
+passport.use(facebookTokenStrategy);
 
 // Add router to request handling chain
 app.use('/api', apiRouter);
