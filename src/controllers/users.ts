@@ -48,7 +48,13 @@ exports.signup_post = [
             return res.status(200).json({
                 message: "User signed up successfully",
                 token: tokenObject,
-                user: user
+                user: {
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    email: user.email,
+                    id: user._id,
+                    profileImageUrl: user.profileImageUrl ? user.profileImageUrl : ""
+                }
             });
         } catch (err) {
             return res.status(500).json({ error: err.message });
@@ -106,4 +112,4 @@ exports.login_post = [
         return res.status(500).json({ error: err.message });
         }
     }
-];
+];  
