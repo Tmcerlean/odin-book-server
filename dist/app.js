@@ -15,6 +15,7 @@ const passport = require("passport");
 // Initialise dotenv
 require('dotenv').config();
 const app = express_1.default();
+const localStrategy = require('./strategies/local');
 const jwtStrategy = require("./strategies/jwt");
 const facebookTokenStrategy = require("./strategies/facebook");
 // CORS setup
@@ -76,6 +77,7 @@ function onListening() {
 }
 // Routes
 const apiRouter = require('./routes/api');
+const test = require('./routes/test');
 // Add middleware libraries
 app.use(logger('dev'));
 app.use(express_1.default.json());
@@ -89,6 +91,7 @@ passport.use(jwtStrategy);
 passport.use(facebookTokenStrategy);
 // Add router to request handling chain
 app.use('/api', apiRouter);
+app.use('/test', passport.authenticate('jwt', { session: false }), test);
 //Set up mongoose connection
 var mongoose = require('mongoose');
 var mongoDB = process.env.DB_URL;

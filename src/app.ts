@@ -18,6 +18,7 @@ require('dotenv').config()
 
 const app = express();
 
+const localStrategy = require('./strategies/local');
 const jwtStrategy = require("./strategies/jwt");
 const facebookTokenStrategy = require("./strategies/facebook");
 
@@ -94,6 +95,7 @@ function onListening() {
  
 // Routes
 const apiRouter = require('./routes/api');
+const test = require('./routes/test');
 
 // Add middleware libraries
 app.use(logger('dev'));
@@ -110,6 +112,7 @@ passport.use(facebookTokenStrategy);
 
 // Add router to request handling chain
 app.use('/api', apiRouter);
+app.use('/test', passport.authenticate('jwt', {session: false}), test);
 
 //Set up mongoose connection
 var mongoose = require('mongoose');

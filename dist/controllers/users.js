@@ -10,8 +10,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_validator_1 = require("express-validator");
+const passport = require("passport");
+const jwt = require('jsonwebtoken');
 const User = require("../models/user");
 const { issueJWT, generatePassword, validatePassword, } = require("../utils/auth-utils");
+// POST signup
 exports.signup_post = [
     // Validate and sanitize fields
     express_validator_1.body('first_name').trim().isLength({ min: 1 }).escape().withMessage('First name must be specified')
@@ -65,44 +68,22 @@ exports.login_post = [
     express_validator_1.body("password", "Password required").trim().isLength({ min: 1 }).escape(),
     // Process request after validation and sanitization.
     (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-        // Extract the validation errors from a request.
-        const errors = express_validator_1.validationResult(req);
-        if (!errors.isEmpty()) {
-            // There are errors in the form data.
-            return res.status(400).json({
-                errors: errors.array()
+        passport.authenticate('local', { session: false }, (err, user, info) => {
+            if (err || !user) {
+                return res.status(400).json({
+                    message: 'Something is not right',
+                    user: user
+                });
+            }
+            req.login(user, { session: false }, (err) => {
+                if (err) {
+                    res.send(err);
+                }
+                // Generate a signed son web token with the contents of user object and return it in the response
+                const token = jwt.sign(user, 'supersecret');
+                return res.json({ user, token });
             });
-        }
-        // Data from form is valid.
-        const { email, password } = req.body;
-        try {
-            const user = yield User.findOne({ email }).select("+password");
-            if (user) {
-                const passwordMatch = validatePassword(password, user);
-                if (passwordMatch) {
-                    const tokenObj = issueJWT(user);
-                    return res.status(200).json({
-                        message: "User logged in successfully",
-                        token: tokenObj,
-                        user: {
-                            firstName: user.firstName,
-                            lastName: user.lastName,
-                            email: user.email,
-                            id: user._id,
-                        },
-                    });
-                }
-                else {
-                    res.status(401).json({ message: "Incorrect password" });
-                }
-            }
-            else {
-                return res.status(404).json({ message: "User not found" });
-            }
-        }
-        catch (err) {
-            return res.status(500).json({ error: err.message });
-        }
+        })(req, res);
     })
 ];
 //# sourceMappingURL=users.js.map

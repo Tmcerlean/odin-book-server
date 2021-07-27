@@ -1,5 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
+const passport = require("passport");
+const jwt = require('jsonwebtoken');
 const User = require("../models/user");
 const {
     issueJWT,
@@ -7,6 +9,7 @@ const {
     validatePassword,
 } = require("../utils/auth-utils");
 
+// POST signup
 exports.signup_post = [
 
     // Validate and sanitize fields
@@ -63,7 +66,6 @@ exports.signup_post = [
 ];
 
 // POST login
-
 exports.login_post = [
   
     body("email", "Email required").trim().isEmail().escape(),
@@ -72,44 +74,27 @@ exports.login_post = [
     // Process request after validation and sanitization.
     async (req: Request, res: Response, next: NextFunction) => {
 
-        // Extract the validation errors from a request.
-        const errors = validationResult(req);
-
-        if (!errors.isEmpty()) {
-            // There are errors in the form data.
-            return res.status(400).json({
-                errors: errors.array()
-            });
-        }
-
-        // Data from form is valid.
-        const { email, password } = req.body;
-    
-        try {
-            const user = await User.findOne({ email }).select("+password");
-            if (user) {
-                const passwordMatch = validatePassword(password, user);
-                if (passwordMatch) {
-                    const tokenObj = issueJWT(user);
-
-                    return res.status(200).json({
-                        message: "User logged in successfully",
-                        token: tokenObj,
-                        user: {
-                            firstName: user.firstName,
-                            lastName: user.lastName,
-                            email: user.email,
-                            id: user._id,
-                        },
-                    });
-                } else {
-                    res.status(401).json({ message: "Incorrect password" });
-                }
-            } else {
-                return res.status(404).json({ message: "User not found" });
+        passport.authenticate('local', {session: false}, (err: Error, user: any, info: any) => {
+            if (err || !user) {
+                return res.status(400).json({
+                    message: 'Something is not right',
+                    user: user
+                });
             }
-        } catch (err) {
-        return res.status(500).json({ error: err.message });
-        }
+
+            req.login(user, {session: false}, (err) => {
+                if (err) {
+                    res.send(err);
+                }
+
+                // Generate a signed son web token with the contents of user object and return it in the response
+                const token = jwt.sign(user, 'supersecret');
+                return res.status(200).json({
+                    message: "User logged in successfully",
+                    token,
+                    user
+                });
+            });        
+        })(req, res);
     }
-];  
+];
