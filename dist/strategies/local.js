@@ -7,16 +7,18 @@ const JWTStrategy = passportJWT.Strategy;
 const ExtractJWT = passportJWT.ExtractJwt;
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
+console.log("TESTING2");
 // Passport login auth
-passport.use(new LocalStrategy((email, password, done) => {
-    User.findOne({ email }, (err, user) => {
+passport.use(new LocalStrategy((username, password, done) => {
+    User.findOne({ username: username }, (err, user) => {
         if (err) {
             return done(err);
         }
         if (!user) {
             return done(null, false, { message: 'Incorrect email.' });
         }
-        bcrypt.compare(password, user.password, (error, res) => {
+        return done(null, user, { message: 'Logged in successfully' });
+        bcrypt.compare(password, user.hashedPassword, (error, res) => {
             if (res) {
                 return done(null, user, { message: 'Logged in successfully' });
             }

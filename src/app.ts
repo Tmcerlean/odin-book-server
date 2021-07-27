@@ -107,8 +107,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Add Passport strategy middleware
-passport.use(jwtStrategy);
 passport.use(facebookTokenStrategy);
+passport.use(jwtStrategy);
 
 // Add router to request handling chain
 app.use('/api', apiRouter);

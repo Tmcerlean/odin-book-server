@@ -68,8 +68,22 @@ exports.login_post = [
     express_validator_1.body("password", "Password required").trim().isLength({ min: 1 }).escape(),
     // Process request after validation and sanitization.
     (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+        // Extract the validation errors from a request.
+        const errors = express_validator_1.validationResult(req);
+        if (!errors.isEmpty()) {
+            // There are errors in the form data.
+            return res.status(400).json({
+                errors: errors.array()
+            });
+        }
         passport.authenticate('local', { session: false }, (err, user, info) => {
-            if (err || !user) {
+            if (!user) {
+                return res.status(400).json({
+                    message: 'No user with those credentials',
+                    user: user
+                });
+            }
+            if (err) {
                 return res.status(400).json({
                     message: 'Something is not right',
                     user: user
@@ -81,7 +95,11 @@ exports.login_post = [
                 }
                 // Generate a signed son web token with the contents of user object and return it in the response
                 const token = jwt.sign(user, 'supersecret');
-                return res.json({ user, token });
+                return res.status(200).json({
+                    message: "User logged in successfully",
+                    token,
+                    user
+                });
             });
         })(req, res);
     })

@@ -46,6 +46,7 @@ exports.signup_post = [
         
         try {
             await user.save();
+
             const tokenObject = issueJWT(user);
 
             return res.status(200).json({
@@ -74,8 +75,25 @@ exports.login_post = [
     // Process request after validation and sanitization.
     async (req: Request, res: Response, next: NextFunction) => {
 
+        // Extract the validation errors from a request.
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            // There are errors in the form data.
+            return res.status(400).json({
+                errors: errors.array()
+            });
+        }
+
         passport.authenticate('local', {session: false}, (err: Error, user: any, info: any) => {
-            if (err || !user) {
+            if (!user) {
+                return res.status(400).json({
+                    message: 'No user with those credentials',
+                    user: user
+                });
+            }
+            
+            if (err) {
                 return res.status(400).json({
                     message: 'Something is not right',
                     user: user
@@ -89,6 +107,7 @@ exports.login_post = [
 
                 // Generate a signed son web token with the contents of user object and return it in the response
                 const token = jwt.sign(user, 'supersecret');
+
                 return res.status(200).json({
                     message: "User logged in successfully",
                     token,

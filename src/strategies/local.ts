@@ -9,17 +9,17 @@ const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 
 // Passport login auth
-passport.use(new LocalStrategy((email: String, password: String, done: Function) => {
-    User.findOne({ email }, (err: Error, user: any) => {
+passport.use(new LocalStrategy((username: any, password: string, done: Function) => {
+    User.findOne({ username }, (err: Error, user: any) => {
         if (err) {
             return done(err);
         }
         if (!user) {
             return done(null, false, { message: 'Incorrect email.' });
         }
-        bcrypt.compare(password, user.password, (error: Error, res: Express.Response) => {
+        bcrypt.compare(password, user.hashedPassword, (error: Error, res: Express.Response) => {
             if (res) {
-                return done(null, user, { message: 'Logged in successfully'});
+                return done(null, user, { message: 'Logged in successfully.'});
             }
             return done(null, false, { message: 'Incorrect password.' });
         });
