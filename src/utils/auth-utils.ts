@@ -3,7 +3,7 @@ import Mongoose from 'mongoose';
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-interface User {
+interface User extends Express.User {
     _id: Mongoose.Types._ObjectId
     posts: String[]
     friends: String[]
@@ -16,7 +16,6 @@ interface User {
 }
 
 // JSON Web Token Generation
-
 const issueJWT = (user: User) => {
   const _id = user._id;
   const expiresIn = "1d";
@@ -37,12 +36,12 @@ const issueJWT = (user: User) => {
 };
 
 // Password Hash Generation
-
-const generatePassword = (password: String) => {
+const generatePassword = (password: string) => {
   return bcrypt.hashSync(password, 10);
 };
 
-const validatePassword = (password: String, user: User) => {
+// Password Hash Validation
+const validatePassword = (password: string, user: User) => {
   return bcrypt.compare(password, user.hashedPassword);
 };
 

@@ -22,6 +22,7 @@ const issueJWT = (user) => {
 const generatePassword = (password) => {
     return bcrypt.hashSync(password, 10);
 };
+// Password Hash Validation
 const validatePassword = (password, user) => {
     return bcrypt.compare(password, user.hashedPassword);
 };
