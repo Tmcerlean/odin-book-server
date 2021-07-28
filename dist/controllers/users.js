@@ -8,12 +8,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_validator_1 = require("express-validator");
-const passport_1 = __importDefault(require("passport"));
 const User = require('../models/user');
 const { issueJWT, generatePassword, validatePassword, } = require('../utils/auth-utils');
 // POST signup
@@ -66,22 +62,7 @@ exports.signup_post = [
 ];
 // POST Facebook Signup / Login
 exports.facebook_post = [
-    passport_1.default.authenticate("facebook-token"),
-    // Process request.
-    (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-        var _a, _b, _c, _d, _e, _f, _g;
-        res.status(201).json({
-            message: "User FB authentication was successful.",
-            user: {
-                firstName: (_a = req === null || req === void 0 ? void 0 : req.user) === null || _a === void 0 ? void 0 : _a.first_name,
-                lastName: (_b = req === null || req === void 0 ? void 0 : req.user) === null || _b === void 0 ? void 0 : _b.last_name,
-                email: (_c = req === null || req === void 0 ? void 0 : req.user) === null || _c === void 0 ? void 0 : _c.email,
-                id: (_d = req === null || req === void 0 ? void 0 : req.user) === null || _d === void 0 ? void 0 : _d._id,
-                profileImageUrl: ((_e = req === null || req === void 0 ? void 0 : req.user) === null || _e === void 0 ? void 0 : _e.profileImageUrl) ? (_f = req === null || req === void 0 ? void 0 : req.user) === null || _f === void 0 ? void 0 : _f.profileImageUrl : "",
-                facebookId: (_g = req === null || req === void 0 ? void 0 : req.user) === null || _g === void 0 ? void 0 : _g.facebookId
-            },
-        });
-    })
+// TODO
 ];
 // POST login
 exports.login_post = [
