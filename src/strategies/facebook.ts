@@ -26,7 +26,7 @@ module.exports = new FacebookTokenStrategy(
   {
     clientID: process.env.FACEBOOK_APP_ID,
     clientSecret: process.env.FACEBOOK_APP_SECRET,
-    fbGraphVersion: "v3.0",
+    callbackURL: "http://localhost:5000/api/facebook"
   },
   function (accessToken: String, refreshToken: String, profile: FacebookProfileObject, done: Function) {
     User.findOrCreate(
@@ -35,7 +35,7 @@ module.exports = new FacebookTokenStrategy(
         firstName: profile._json.first_name,
         lastName: profile._json.last_name,
         email: profile._json.email,
-        profileImageUrl: profile.photos[0].value,
+        profileImageUrl: profile.photos[0].value
       },
       function (error: Error, user: Express.User) {
         return done(error, user);

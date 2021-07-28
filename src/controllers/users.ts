@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
-const passport = require('passport');
-const jwt = require('jsonwebtoken');
+import passport from 'passport';
 const User = require('../models/user');
 const {
     issueJWT,
@@ -65,6 +64,26 @@ exports.signup_post = [
         }
     }
 ];
+
+// POST Facebook Signup / Login
+exports.facebook_post = [
+    passport.authenticate("facebook-token"), 
+    
+    // Process request.
+    async (req: Request, res: Response, next: NextFunction) => {
+        res.status(201).json({
+            message: "User FB authentication was successful.",
+            user: {
+                firstName: req?.user?.first_name,
+                lastName: req?.user?.last_name,
+                email: req?.user?.email,
+                id: req?.user?._id,
+                profileImageUrl: req?.user?.profileImageUrl ? req?.user?.profileImageUrl : "",
+                facebookId: req?.user?.facebookId
+            },
+        });
+    }
+]
 
 // POST login
 exports.login_post = [
