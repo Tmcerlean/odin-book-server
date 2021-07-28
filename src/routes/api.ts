@@ -40,10 +40,10 @@ const userController = require('../controllers/users');
 // // GET all posts - /api/posts
 // router.get('/posts', postController.get_posts);
 
-// // POST create post - /api/posts
-// router.post('/posts', [
-//   postController.create_post
-// ]);
+// POST create post - /api/posts
+router.post('/posts', [
+  postController.create_post
+]);
 
 // // PUT edit post - /api/posts/:id
 // router.put('/posts/:id', [

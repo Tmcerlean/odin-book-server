@@ -1,2 +1,45 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_validator_1 = require("express-validator");
+const Post = require('../models/post');
+exports.create_post = [
+    // Validate and sanitize fields
+    express_validator_1.body("content").isLength({ min: 1 }).withMessage("Content must contain at least 1 character.").escape(),
+    // Process request after validation and sanitization.
+    (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+        // Extract the validation errors from a request.
+        const errors = express_validator_1.validationResult(req);
+        if (!errors.isEmpty()) {
+            // There are errors in the form data.
+            return res.json({
+                data: req.body,
+                errors: errors.array(),
+            });
+        }
+        // Data from form is valid.
+        // Title, body, timestamp - default to created time, user, published - default to false
+        const { content } = req.body;
+        const post = new Post({
+            content,
+        });
+        try {
+            yield post.save();
+            return res.status(200).json({
+                message: "Post saved.",
+            });
+        }
+        catch (error) {
+            return res.status(500).json({ error: error.message });
+        }
+    }),
+];
 //# sourceMappingURL=posts.js.map

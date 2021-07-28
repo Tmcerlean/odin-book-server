@@ -38,7 +38,9 @@ exports.signup_post = [
             firstName: req.body.first_name,
             lastName: req.body.last_name,
             email: req.body.email,
-            hashedPassword: hashedPassword
+            hashedPassword: hashedPassword,
+            profileImageUrl: "",
+            facebookId: ""
         });
         try {
             yield user.save();
