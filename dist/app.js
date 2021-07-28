@@ -14,10 +14,11 @@ const session = require('express-session');
 const passport = require("passport");
 // Initialise dotenv
 require('dotenv').config();
-const app = express_1.default();
-const localStrategy = require('./strategies/local');
+// Import Passport Strategies (after initialising dotenv environment variables)
 const jwtStrategy = require("./strategies/jwt");
-const facebookTokenStrategy = require("./strategies/facebook");
+const facebookStrategy = require("./strategies/facebook");
+// Define main app
+const app = express_1.default();
 // CORS setup
 app.use(cors());
 // Module dependencies
@@ -87,7 +88,7 @@ app.use(express_1.default.static(path.join(__dirname, 'public')));
 app.use(passport.initialize());
 app.use(passport.session());
 // Add Passport strategy middleware
-passport.use(facebookTokenStrategy);
+passport.use(facebookStrategy);
 passport.use(jwtStrategy);
 // Add router to request handling chain
 app.use('/api', apiRouter);

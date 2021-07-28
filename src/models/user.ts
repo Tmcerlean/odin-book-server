@@ -13,7 +13,7 @@ var UserSchema = new Schema(
     friends: [{ type: Schema.Types.ObjectId, ref: "User" }],
     friendRequests: [{ type: Schema.Types.ObjectId, ref: "User" }],
     profileImageUrl: { type: String },
-    facebookId: { type: String },
+    facebookId: { type: String }
   }
 );
 

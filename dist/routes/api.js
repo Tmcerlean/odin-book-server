@@ -58,6 +58,8 @@ router.post('/login', userController.login_post);
 // router.post('/logout', userController.logout_post);
 // POST request for user sign up - /api/signup
 router.post('/signup', userController.signup_post);
+// POST request for Facebook sign up / login - /api/facebook
+router.post('/facebook', userController.facebook_post);
 // // POST send friend request - /api/request
 // router.post('/request', userController.friend_request_post);
 // // DELETE cancel friend request - /api/request

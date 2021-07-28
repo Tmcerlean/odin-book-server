@@ -1,7 +1,7 @@
 export {};
 
 const passport = require("passport");
-const FacebookTokenStrategy = require("passport-facebook-token");
+const FacebookStrategy = require("passport-facebook");
 const User = require("../models/user");
 
 interface FacebookPhotosObject extends Object {
@@ -22,7 +22,7 @@ interface PassportUserObject extends Express.User {
   _id: String
 }
 
-module.exports = new FacebookTokenStrategy(
+module.exports = new FacebookStrategy(
   {
     clientID: process.env.FACEBOOK_APP_ID,
     clientSecret: process.env.FACEBOOK_APP_SECRET,

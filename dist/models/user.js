@@ -10,8 +10,8 @@ var UserSchema = new Schema({
     posts: [{ type: Schema.Types.ObjectId, ref: "Post" }],
     friends: [{ type: Schema.Types.ObjectId, ref: "User" }],
     friendRequests: [{ type: Schema.Types.ObjectId, ref: "User" }],
-    profileImageUrl: { type: String, required: false },
-    facebookId: { type: String, required: false },
+    profileImageUrl: { type: String },
+    facebookId: { type: String }
 });
 // Virtual for author's full name
 UserSchema

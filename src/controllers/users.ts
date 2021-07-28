@@ -67,15 +67,16 @@ exports.signup_post = [
 
 // POST Facebook Signup / Login
 exports.facebook_post = [
-    passport.authenticate("facebook-token"), 
+    passport.authenticate("facebook"), 
     
     // Process request.
     async (req: Request, res: Response, next: NextFunction) => {
+
         res.status(201).json({
             message: "User FB authentication was successful.",
             user: {
-                firstName: req?.user?.first_name,
-                lastName: req?.user?.last_name,
+                firstName: req?.user?.firstName,
+                lastName: req?.user?.lastName,
                 email: req?.user?.email,
                 id: req?.user?._id,
                 profileImageUrl: req?.user?.profileImageUrl ? req?.user?.profileImageUrl : "",

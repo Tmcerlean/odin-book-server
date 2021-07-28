@@ -16,11 +16,12 @@ interface ErrorInfo extends Error {
 // Initialise dotenv
 require('dotenv').config()
 
-const app = express();
-
-const localStrategy = require('./strategies/local');
+// Import Passport Strategies (after initialising dotenv environment variables)
 const jwtStrategy = require("./strategies/jwt");
-const facebookTokenStrategy = require("./strategies/facebook");
+const facebookStrategy = require("./strategies/facebook");
+
+// Define main app
+const app = express();
 
 // CORS setup
 app.use(cors())
@@ -107,7 +108,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Add Passport strategy middleware
-passport.use(facebookTokenStrategy);
+passport.use(facebookStrategy);
 passport.use(jwtStrategy);
 
 // Add router to request handling chain
