@@ -1,6 +1,6 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Request, Response } from 'express';
+import { body, validationResult } from 'express-validator';
 
-const { body, validationResult } = require('express-validator');
 const Comment = require("../models/comment");
 
 // THIS IS A TEST

@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
-import passport from 'passport';
+
 const Post = require('../models/post');
 
 exports.create_post = [
