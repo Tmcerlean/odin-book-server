@@ -76,9 +76,6 @@ function onListening() {
         : 'port ' + addr.port;
     debug('Listening on ' + bind);
 }
-// Routes
-const apiRouter = require('./routes/api');
-const test = require('./routes/test');
 // Add middleware libraries
 app.use(logger('dev'));
 app.use(express_1.default.json());
@@ -90,9 +87,12 @@ app.use(passport.session());
 // Add Passport strategy middleware
 passport.use(facebookStrategy);
 passport.use(jwtStrategy);
+// Require index router
+const indexRouter = require("./routes/index");
+const test = require('./routes/test'); // DELETE
 // Add router to request handling chain
-app.use('/api', apiRouter);
-app.use('/test', passport.authenticate('jwt', { session: false }), test);
+app.use('/api', indexRouter);
+app.use('/test', passport.authenticate('jwt', { session: false }), test); // DELETE
 //Set up mongoose connection
 var mongoose = require('mongoose');
 var mongoDB = process.env.DB_URL;

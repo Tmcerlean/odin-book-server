@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 
 const jwt = require("jsonwebtoken");
-
 const ExtractJwt = require("passport-jwt").ExtractJwt;
 
 interface TokenPayloadRequest extends Request {

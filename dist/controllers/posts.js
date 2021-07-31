@@ -26,16 +26,21 @@ exports.create_post = [
             });
         }
         // Data from form is valid.
-        // Title, body, timestamp - default to created time, user, published - default to false
+        // Create new post and save
         const { content } = req.body;
         const post = new Post({
+            author: req.payload.id,
             content,
         });
         try {
-            yield post.save();
-            return res.status(200).json({
-                message: "Post saved.",
-            });
+            const newPost = yield post.save();
+            // Populate author's post array with newly created post
+            const savedPost = yield Post.findById(newPost._id).populate("author");
+            if (savedPost) {
+                return res.status(200).json({
+                    message: "Post saved.", post: savedPost
+                });
+            }
         }
         catch (error) {
             return res.status(500).json({ error: error.message });

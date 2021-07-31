@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const { body, validationResult } = require('express-validator');
 const Comment = require("../models/comment");
 // THIS IS A TEST
 // exports.get_comments = async function (req: Request, res: Response, next: NextFunction) {
