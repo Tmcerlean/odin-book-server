@@ -2,6 +2,36 @@ import { NextFunction, Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
 
 const Post = require('../models/post');
+const User = require('../models/user');
+
+exports.get_posts = [
+    // Process request.
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            // Get logged in user object
+            const loggedInUser = await User.findById(req.payload.id);
+
+            // Get friends posts by spreading in friends array
+            const posts = await Post.find({
+                author: [...loggedInUser.friends]
+            }, null, { limit: 10 })
+            .sort({ timestamp: "desc" })
+            .populate("author")
+            .populate({
+                path: "comments",
+                model: "Comment",
+                populate: {
+                    path: "user",
+                    model: "User",
+                }
+            });
+
+            return res.status(200).json({ posts: posts }); 
+        } catch (error) {
+            return res.status(500).json({ error: error.message });
+        }
+    }
+];
 
 exports.create_post = [
 

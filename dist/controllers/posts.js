@@ -11,6 +11,34 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_validator_1 = require("express-validator");
 const Post = require('../models/post');
+const User = require('../models/user');
+exports.get_posts = [
+    // Process request.
+    (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+        try {
+            // Get logged in user object
+            const loggedInUser = yield User.findById(req.payload.id);
+            // Get friends posts by spreading in friends array
+            const posts = yield Post.find({
+                author: [...loggedInUser.friends]
+            }, null, { limit: 10 })
+                .sort({ timestamp: "desc" })
+                .populate("author")
+                .populate({
+                path: "comments",
+                model: "Comment",
+                populate: {
+                    path: "user",
+                    model: "User",
+                }
+            });
+            return res.status(200).json({ posts: posts });
+        }
+        catch (error) {
+            return res.status(500).json({ error: error.message });
+        }
+    })
+];
 exports.create_post = [
     // Validate and sanitize fields
     express_validator_1.body("content").isLength({ min: 1 }).withMessage("Content must contain at least 1 character.").escape(),

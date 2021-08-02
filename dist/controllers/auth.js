@@ -113,4 +113,10 @@ exports.login_post = [
         }
     })
 ];
+// POST logout
+exports.logout_post = function (req, res, next) {
+    // Need to clear localStorage in client also
+    req.logout();
+    res.redirect('/');
+};
 //# sourceMappingURL=auth.js.map
