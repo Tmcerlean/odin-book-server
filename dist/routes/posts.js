@@ -12,7 +12,7 @@ router.use(passport.authenticate('jwt', { session: false }));
 // and any additional route handlers will not be invoked. If authentication succeeds, the next 
 // handler will be invoked and the req.user property will be set to the authenticated user.
 // getTokenData returns any user information stored within the JWT token and adds to req object.
-router.use(getTokenData);
+// router.use(getTokenData);
 // POST ROUTES
 // // GET single post - /api/posts/:id
 // router.get('/posts/:id', postController.get_post);

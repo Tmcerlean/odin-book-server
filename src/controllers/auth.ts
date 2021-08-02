@@ -124,3 +124,10 @@ exports.login_post = [
         }
     }
 ];
+
+// POST logout
+exports.logout_post = function(req: Request, res: Response, next: NextFunction) {
+    // Need to clear localStorage in client also
+    req.logout();
+    res.redirect('/');
+};

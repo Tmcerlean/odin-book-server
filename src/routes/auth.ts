@@ -10,7 +10,7 @@ const authController = require('../controllers/auth');
 router.post('/login', authController.login_post);
 
 // // POST request for log out - /api/logout
-// router.post('/logout', authController.logout_post);
+router.post('/logout', authController.logout_post);
 
 // POST request for user sign up - /api/signup
 router.post('/signup', authController.signup_post);
