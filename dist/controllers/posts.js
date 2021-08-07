@@ -18,9 +18,9 @@ exports.get_posts = [
         try {
             // Get logged in user object
             const loggedInUser = yield User.findById(req.payload.id);
-            // Get friends posts by spreading in friends array
+            // Get user + friends posts by spreading in friends array
             const posts = yield Post.find({
-                author: [...loggedInUser.friends]
+                author: [req.payload.id, ...loggedInUser.friends]
             }, null, { limit: 10 })
                 .sort({ timestamp: "desc" })
                 .populate("author")
@@ -74,5 +74,37 @@ exports.create_post = [
             return res.status(500).json({ error: error.message });
         }
     }),
+];
+exports.like_post = [
+    // Process request.
+    (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+        try {
+            // Find post by id
+            const likedPost = yield Post.findById(req.params.id);
+            // Handle case where no post was found
+            if (!likedPost) {
+                return res.status(404).json({ message: "Post not found" });
+            }
+            // If user id is within post's like array then remove user id
+            if (likedPost.likes.includes(req.payload.id)) {
+                const likesArray = [...likedPost.likes];
+                const filteredLikesArray = likesArray.filter((userId) => userId != req.payload.id);
+                likedPost.likes = filteredLikesArray;
+                // Save updated post
+                const updatedPost = yield likedPost.save();
+                return res.status(200).json({ message: "Post liked", post: updatedPost });
+                // Else add user id
+            }
+            else {
+                likedPost.likes.push(req.payload.id);
+                // Save updated post
+                const updatedPost = yield likedPost.save();
+                return res.status(200).json({ message: "Post unliked", post: updatedPost });
+            }
+        }
+        catch (error) {
+            return res.status(500).json({ error: error.message });
+        }
+    })
 ];
 //# sourceMappingURL=posts.js.map

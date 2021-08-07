@@ -22,19 +22,22 @@ router.use(getTokenData);
 
 // POST ROUTES
 
-// // GET single post - /api/posts/:id
+// GET single post - /api/posts/:id
 // router.get('/posts/:id', postController.get_post);
 
-// // GET all posts - /api/posts
+// GET all posts - /api/posts
 router.get('/', postController.get_posts);
 
 // POST create post - /api/posts
 router.post('/', postController.create_post);
   
-// // PUT edit post - /api/posts/:id
+// PUT edit post - /api/posts/:id
 // router.put('/posts/:id', postController.edit_post);
 
-// // DELETE post - /api/posts/:id
+// PUT toggle like post - /api/posts/:id/like
+router.put('/:id/like', postController.like_post);
+
+// DELETE post - /api/posts/:id
 // router.delete('/posts/:id', postController.delete_post);
 
 module.exports = router;
