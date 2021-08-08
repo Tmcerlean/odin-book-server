@@ -41,7 +41,7 @@ exports.get_posts = [
 ];
 exports.create_post = [
     // Validate and sanitize fields
-    express_validator_1.body("content").isLength({ min: 1 }).withMessage("Content must contain at least 1 character.").escape(),
+    express_validator_1.body("content").isLength({ min: 1 }).withMessage("Post must contain at least 1 character.").escape(),
     // Process request after validation and sanitization.
     (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         // Extract the validation errors from a request.
@@ -66,7 +66,7 @@ exports.create_post = [
             const savedPost = yield Post.findById(newPost._id).populate("author");
             if (savedPost) {
                 return res.status(200).json({
-                    message: "Post saved.", post: savedPost
+                    message: "Post saved.", post: savedPost, test: newPost
                 });
             }
         }
@@ -92,14 +92,14 @@ exports.like_post = [
                 likedPost.likes = filteredLikesArray;
                 // Save updated post
                 const updatedPost = yield likedPost.save();
-                return res.status(200).json({ message: "Post liked", post: updatedPost });
+                return res.status(200).json({ message: "Post unliked", post: updatedPost });
                 // Else add user id
             }
             else {
                 likedPost.likes.push(req.payload.id);
                 // Save updated post
                 const updatedPost = yield likedPost.save();
-                return res.status(200).json({ message: "Post unliked", post: updatedPost });
+                return res.status(200).json({ message: "Post liked", post: updatedPost });
             }
         }
         catch (error) {

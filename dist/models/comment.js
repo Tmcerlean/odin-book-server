@@ -4,9 +4,9 @@ var Schema = mongoose.Schema;
 var CommentSchema = new Schema({
     author: { type: Schema.Types.ObjectId, ref: "User" },
     comment: { type: String, required: true, minLength: 1, maxLength: 300 },
-    timestamp: { type: Date, required: true },
+    timestamp: { type: Date, default: Date.now, required: true },
     post: { type: Schema.Types.ObjectId, ref: "Post" },
-    likes: [{ type: Schema.Types.ObjectId, ref: "User" }],
+    likes: [{ type: Schema.Types.ObjectId, ref: "User" }]
 });
 CommentSchema.virtual("date_formated").get(function () {
     return this.timestamp.toLocaleDateString("en-gb", {

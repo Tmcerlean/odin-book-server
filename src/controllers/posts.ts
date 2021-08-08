@@ -36,7 +36,7 @@ exports.get_posts = [
 exports.create_post = [
 
     // Validate and sanitize fields
-    body("content").isLength({ min: 1 }).withMessage("Content must contain at least 1 character.").escape(),
+    body("content").isLength({ min: 1 }).withMessage("Post must contain at least 1 character.").escape(),
   
     // Process request after validation and sanitization.
     async (req: Request, res: Response, next: NextFunction) => {
@@ -66,10 +66,10 @@ exports.create_post = [
 
             // Populate author's post array with newly created post
             const savedPost = await Post.findById(newPost._id).populate("author");
-            
+           
             if (savedPost) {
                 return res.status(200).json({ 
-                    message: "Post saved.", post: savedPost 
+                    message: "Post saved.", post: savedPost
                 });
             }
         } catch (error) {
